@@ -19,6 +19,7 @@
 		5551767E24AEA4CD0092CA87 /* SplitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551767D24AEA4CD0092CA87 /* SplitRow.swift */; };
 		5551768124AFB3830092CA87 /* Array+Functional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551768024AFB3830092CA87 /* Array+Functional.swift */; };
 		5551768324AFB9510092CA87 /* Keycodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551768224AFB9510092CA87 /* Keycodes.swift */; };
+		557240F024B1150F003EF379 /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557240EF24B1150F003EF379 /* TimeFormatting.swift */; };
 		559A727524A1CCE9006C7AE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559A727424A1CCE9006C7AE6 /* AppDelegate.swift */; };
 		559A727724A1CCEA006C7AE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 559A727624A1CCEA006C7AE6 /* Assets.xcassets */; };
 		559A727A24A1CCEA006C7AE6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 559A727824A1CCEA006C7AE6 /* MainMenu.xib */; };
@@ -37,6 +38,7 @@
 		5551767D24AEA4CD0092CA87 /* SplitRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRow.swift; sourceTree = "<group>"; };
 		5551768024AFB3830092CA87 /* Array+Functional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Functional.swift"; sourceTree = "<group>"; };
 		5551768224AFB9510092CA87 /* Keycodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycodes.swift; sourceTree = "<group>"; };
+		557240EF24B1150F003EF379 /* TimeFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatting.swift; sourceTree = "<group>"; };
 		559A727124A1CCE9006C7AE6 /* SplitCaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitCaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		559A727424A1CCE9006C7AE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		559A727624A1CCEA006C7AE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 			children = (
 				5551768024AFB3830092CA87 /* Array+Functional.swift */,
 				5551768224AFB9510092CA87 /* Keycodes.swift */,
+				557240EF24B1150F003EF379 /* TimeFormatting.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -111,10 +114,10 @@
 			children = (
 				5551755A24AC2A110092CA87 /* AppState.swift */,
 				5551765824AD80990092CA87 /* AppState+Updaters.swift */,
-				5551755624A5CEB40092CA87 /* SplitModel.swift */,
-				5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */,
 				5551755824A5D03B0092CA87 /* RouteModel.swift */,
 				5551755E24AC37C10092CA87 /* RouteModel+Updaters.swift */,
+				5551755624A5CEB40092CA87 /* SplitModel.swift */,
+				5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				5551755D24AC31640092CA87 /* SplitModel+Updaters.swift in Sources */,
 				5551768124AFB3830092CA87 /* Array+Functional.swift in Sources */,
 				5551755F24AC37C10092CA87 /* RouteModel+Updaters.swift in Sources */,
+				557240F024B1150F003EF379 /* TimeFormatting.swift in Sources */,
 				559A727524A1CCE9006C7AE6 /* AppDelegate.swift in Sources */,
 				5551768324AFB9510092CA87 /* Keycodes.swift in Sources */,
 				5551765B24ADA95D0092CA87 /* AppStateController.swift in Sources */,

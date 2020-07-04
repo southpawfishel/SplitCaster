@@ -26,16 +26,15 @@ struct SplitRow: View {
         .offset(x: 20.0)
         .frame(alignment: .leading)
       Spacer()
-      Text(split.startTimestamp != nil ? String(split.startTimestamp!) : "-")
-        .font(.title)
+      Text("-")
+        .font(.system(.headline, design: .monospaced))
         .padding(20.0)
-        .frame(alignment: .trailing)
-      Text(split.elapsed != nil ? String(split.elapsed!) : "-")
-        .font(.title)
+        .frame(width: 120.0, alignment: .trailing)
+      Text(TimeFormatting.formatDuration(seconds: split.elapsed))
+        .font(.system(.headline, design: .monospaced))
         .padding(20.0)
-        .frame(alignment: .trailing)
-    }
-      .frame(height: 60.0)
+        .frame(width: 120.0, alignment: .trailing)
+    }.frame(height: 60.0)
   }
 }
 
