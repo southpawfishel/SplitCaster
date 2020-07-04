@@ -1,0 +1,44 @@
+{
+  "name": "16 Star",
+  "gameName": "Super Mario 64",
+  "platform": "Nintendo 64",
+  "attemptCount": 0,
+  "splits": [
+    {
+      "name": "BOB (1)",
+      "iconFilename": "bob6"
+    }, {
+      "name": "WF (6)",
+      "iconFilename": "wf1"
+    }, {
+      "name": "CCM (8)",
+      "iconFilename": "ccm2"
+    }, {
+      "name": "BitDW (9)",
+      "iconFilename": "bitdw"
+    }, {
+      "name": "SSL (11)",
+      "iconFilename": "ssl1"
+    }, {
+      "name": "LLL (12)",
+      "iconFilename": "lll3"
+    }, {
+      "name": "HMC (15)",
+      "iconFilename": "hmc1"
+    }, {
+      "name": "DDD (16)",
+      "iconFilename": "ddd1"
+    }, {
+      "name": "BitFS",
+      "iconFilename": "bitfs"
+    }, {
+      "name": "BLJs",
+      "iconFilename": "toad2"
+    }, {
+      "name": "BitS",
+      "iconFilename": "bits"
+    }
+  ],
+  "currentRun": [],
+  "currentSplit": 0
+}

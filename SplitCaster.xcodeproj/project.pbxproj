@@ -7,12 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5551755724A5CEB40092CA87 /* SplitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755624A5CEB40092CA87 /* SplitModel.swift */; };
+		5551755924A5D03B0092CA87 /* RouteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755824A5D03B0092CA87 /* RouteModel.swift */; };
+		5551755B24AC2A110092CA87 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755A24AC2A110092CA87 /* AppState.swift */; };
+		5551755D24AC31640092CA87 /* SplitModel+Updaters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */; };
+		5551755F24AC37C10092CA87 /* RouteModel+Updaters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755E24AC37C10092CA87 /* RouteModel+Updaters.swift */; };
+		5551756424AD76E20092CA87 /* route.json in Resources */ = {isa = PBXBuildFile; fileRef = 5551756324AD76E20092CA87 /* route.json */; };
+		5551765924AD80990092CA87 /* AppState+Updaters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551765824AD80990092CA87 /* AppState+Updaters.swift */; };
+		5551765B24ADA95D0092CA87 /* AppStateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551765A24ADA95D0092CA87 /* AppStateController.swift */; };
+		5551765D24AE66D70092CA87 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551765C24AE66D70092CA87 /* AppView.swift */; };
+		5551767E24AEA4CD0092CA87 /* SplitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551767D24AEA4CD0092CA87 /* SplitRow.swift */; };
+		5551768124AFB3830092CA87 /* Array+Functional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551768024AFB3830092CA87 /* Array+Functional.swift */; };
+		5551768324AFB9510092CA87 /* Keycodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551768224AFB9510092CA87 /* Keycodes.swift */; };
 		559A727524A1CCE9006C7AE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559A727424A1CCE9006C7AE6 /* AppDelegate.swift */; };
 		559A727724A1CCEA006C7AE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 559A727624A1CCEA006C7AE6 /* Assets.xcassets */; };
 		559A727A24A1CCEA006C7AE6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 559A727824A1CCEA006C7AE6 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5551755624A5CEB40092CA87 /* SplitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitModel.swift; sourceTree = "<group>"; };
+		5551755824A5D03B0092CA87 /* RouteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteModel.swift; sourceTree = "<group>"; };
+		5551755A24AC2A110092CA87 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplitModel+Updaters.swift"; sourceTree = "<group>"; };
+		5551755E24AC37C10092CA87 /* RouteModel+Updaters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteModel+Updaters.swift"; sourceTree = "<group>"; };
+		5551756324AD76E20092CA87 /* route.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = route.json; sourceTree = "<group>"; };
+		5551765824AD80990092CA87 /* AppState+Updaters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Updaters.swift"; sourceTree = "<group>"; };
+		5551765A24ADA95D0092CA87 /* AppStateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateController.swift; sourceTree = "<group>"; };
+		5551765C24AE66D70092CA87 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		5551767D24AEA4CD0092CA87 /* SplitRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRow.swift; sourceTree = "<group>"; };
+		5551768024AFB3830092CA87 /* Array+Functional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Functional.swift"; sourceTree = "<group>"; };
+		5551768224AFB9510092CA87 /* Keycodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycodes.swift; sourceTree = "<group>"; };
 		559A727124A1CCE9006C7AE6 /* SplitCaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitCaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		559A727424A1CCE9006C7AE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		559A727624A1CCEA006C7AE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -32,6 +56,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5551756224AD76BE0092CA87 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				5551756324AD76E20092CA87 /* route.json */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		5551767F24AFB36A0092CA87 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				5551768024AFB3830092CA87 /* Array+Functional.swift */,
+				5551768224AFB9510092CA87 /* Keycodes.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		559A726824A1CCE9006C7AE6 = {
 			isa = PBXGroup;
 			children = (
@@ -51,13 +92,48 @@
 		559A727324A1CCE9006C7AE6 /* SplitCaster */ = {
 			isa = PBXGroup;
 			children = (
+				5551756224AD76BE0092CA87 /* Data */,
+				559A728824A46069006C7AE6 /* Controllers */,
+				559A728724A4605D006C7AE6 /* Views */,
+				559A728624A46055006C7AE6 /* Models */,
+				5551767F24AFB36A0092CA87 /* Utils */,
 				559A727424A1CCE9006C7AE6 /* AppDelegate.swift */,
-				559A727624A1CCEA006C7AE6 /* Assets.xcassets */,
 				559A727824A1CCEA006C7AE6 /* MainMenu.xib */,
+				559A727624A1CCEA006C7AE6 /* Assets.xcassets */,
 				559A727B24A1CCEA006C7AE6 /* Info.plist */,
 				559A727C24A1CCEA006C7AE6 /* SplitCaster.entitlements */,
 			);
 			path = SplitCaster;
+			sourceTree = "<group>";
+		};
+		559A728624A46055006C7AE6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5551755A24AC2A110092CA87 /* AppState.swift */,
+				5551765824AD80990092CA87 /* AppState+Updaters.swift */,
+				5551755624A5CEB40092CA87 /* SplitModel.swift */,
+				5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */,
+				5551755824A5D03B0092CA87 /* RouteModel.swift */,
+				5551755E24AC37C10092CA87 /* RouteModel+Updaters.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		559A728724A4605D006C7AE6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5551765C24AE66D70092CA87 /* AppView.swift */,
+				5551767D24AEA4CD0092CA87 /* SplitRow.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		559A728824A46069006C7AE6 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5551765A24ADA95D0092CA87 /* AppStateController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				559A727724A1CCEA006C7AE6 /* Assets.xcassets in Resources */,
+				5551756424AD76E20092CA87 /* route.json in Resources */,
 				559A727A24A1CCEA006C7AE6 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,7 +207,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5551755724A5CEB40092CA87 /* SplitModel.swift in Sources */,
+				5551755B24AC2A110092CA87 /* AppState.swift in Sources */,
+				5551765D24AE66D70092CA87 /* AppView.swift in Sources */,
+				5551767E24AEA4CD0092CA87 /* SplitRow.swift in Sources */,
+				5551755D24AC31640092CA87 /* SplitModel+Updaters.swift in Sources */,
+				5551768124AFB3830092CA87 /* Array+Functional.swift in Sources */,
+				5551755F24AC37C10092CA87 /* RouteModel+Updaters.swift in Sources */,
 				559A727524A1CCE9006C7AE6 /* AppDelegate.swift in Sources */,
+				5551768324AFB9510092CA87 /* Keycodes.swift in Sources */,
+				5551765B24ADA95D0092CA87 /* AppStateController.swift in Sources */,
+				5551755924A5D03B0092CA87 /* RouteModel.swift in Sources */,
+				5551765924AD80990092CA87 /* AppState+Updaters.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,8 +354,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SplitCaster/SplitCaster.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = ZJQ5MFP95P;
 				INFOPLIST_FILE = SplitCaster/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -284,8 +374,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SplitCaster/SplitCaster.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = ZJQ5MFP95P;
 				INFOPLIST_FILE = SplitCaster/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
