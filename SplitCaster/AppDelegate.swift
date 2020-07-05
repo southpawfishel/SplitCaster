@@ -47,6 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct AppDelegate_Previews: PreviewProvider {
   static var previews: some View {
     let testState = AppStateController(filename: "route.json")
+    testState.handlePermissionsResult(hasPermissions: true)
     return AppView().environmentObject(testState)
   }
 }
