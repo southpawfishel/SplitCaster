@@ -13,38 +13,25 @@ struct AppView: View {
 
   var body: some View {
     Group {
-      /**
-       * Just show permissions prompt if in permissions state
-       */
-      if !stateStore.state.hasPermissions {
-        permissionsScreen
+      if stateStore.state.hasPermissions {
+        SplitsScreen
       } else {
-        splitsScreen
+        PermissionsScreen
       }
     }
   }
 
-  var permissionsScreen: some View {
-    GeometryReader { g in
-      HStack {
-        Text("You must grant permissions to read global keyboard events in order to use this app. Please do so in the Accessibility Settings and re-launch the app")
-          .frame(width: g.size.width * 0.5,
-                 height: g.size.height)
-      }
-    }
-  }
-
-  var splitsScreen: some View {
+  var SplitsScreen: some View {
     VStack {
-      splitsHeader
+      SplitsHeader
       List(stateStore.state.route.currentRun, id: \.name) { split in
         SplitRow(split: split)
       }
-      splitsFooter
+      SplitsFooter
     }
   }
 
-  var splitsHeader: some View {
+  var SplitsHeader: some View {
     VStack {
       Text(stateStore.state.route.gameName)
         .font(.system(size: 22.0,
@@ -72,7 +59,7 @@ struct AppView: View {
       .padding(.top, 4.0)
   }
 
-  var splitsFooter: some View {
+  var SplitsFooter: some View {
     VStack {
       HStack {
         Spacer()
@@ -85,6 +72,16 @@ struct AppView: View {
       }
     }
       .padding(.bottom, 4.0)
+  }
+
+  var PermissionsScreen: some View {
+    GeometryReader { g in
+      HStack {
+        Text("You must grant permissions to read global keyboard events in order to use this app. Please do so in the Accessibility Settings and re-launch the app")
+          .frame(width: g.size.width * 0.5,
+                 height: g.size.height)
+      }
+    }
   }
 }
 

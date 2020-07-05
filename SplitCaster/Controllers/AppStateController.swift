@@ -9,6 +9,12 @@
 import AppKit
 import Foundation
 
+/**
+ * This class essentially owns the business logic of the application.
+ *
+ * It exposes a readonly app state that the SwiftUI views use to draw the screen, and handles all app state mutations
+ * in response to keyboard events and timer updates.
+ */
 class AppStateController: ObservableObject {
   @Published public private(set) var state: AppState = AppState()
 
