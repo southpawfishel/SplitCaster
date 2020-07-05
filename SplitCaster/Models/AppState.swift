@@ -9,17 +9,16 @@
 import Foundation
 
 public struct AppState: Equatable {
-  public enum State {
-    case needsPermissions
-    case stopped
-    case running
-  }
-
-  public let state: State
+  /** Whether or not the app has global key event permissions */
+  public let hasPermissions: Bool
+  /** Whether or not there is a run in progress */
+  public let runInProgress: Bool
+  /** Data for the current route */
   public let route: RouteModel
 
   public init() {
-    state = .needsPermissions
+    hasPermissions = false
+    runInProgress = false
     route = RouteModel(name: "",
                        gameName: "",
                        platform: nil,
@@ -30,8 +29,9 @@ public struct AppState: Equatable {
                        currentRun: [])
   }
 
-  public init(state: State, route: RouteModel!) {
-    self.state = state
+  public init(hasPermissions: Bool, runInProgress: Bool, route: RouteModel) {
+    self.hasPermissions = hasPermissions
+    self.runInProgress = runInProgress
     self.route = route
   }
 }

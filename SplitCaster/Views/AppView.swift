@@ -9,14 +9,14 @@
 import SwiftUI
 
 struct AppView: View {
-  @EnvironmentObject var stateOwner: AppStateController
+  @EnvironmentObject var stateStore: AppStateController
 
   var body: some View {
     Group {
       /**
        * Just show permissions prompt if in permissions state
        */
-      if stateOwner.state.state == .needsPermissions {
+      if !stateStore.state.hasPermissions {
         permissionsScreen
       } else {
         splitsScreen
@@ -35,15 +35,63 @@ struct AppView: View {
   }
 
   var splitsScreen: some View {
-    List(stateOwner.state.route.currentRun, id: \.name) { split in
-      SplitRow(split: split)
+    VStack {
+      splitsHeader
+      List(stateStore.state.route.currentRun, id: \.name) { split in
+        SplitRow(split: split)
+      }
+      splitsFooter
     }
+  }
+
+  var splitsHeader: some View {
+    VStack {
+      Text(stateStore.state.route.gameName)
+        .font(.system(size: 22.0,
+                      weight: .regular,
+                      design: .default))
+      ZStack {
+        HStack {
+          Text(stateStore.state.route.name)
+            .frame(alignment: .center)
+            .font(.system(size: 20.0,
+                          weight: .regular,
+                          design: .default))
+        }
+        HStack {
+          Spacer()
+          Text(String(stateStore.state.route.attemptCount))
+            .font(.system(size: 20.0,
+                          weight: .regular,
+                          design: .default))
+            .frame(alignment: .trailing)
+            .padding(.trailing, 10.0)
+        }
+      }
+    }
+      .padding(.top, 4.0)
+  }
+
+  var splitsFooter: some View {
+    VStack {
+      HStack {
+        Spacer()
+        Text(TimeFormatting.formatDurationHMSMS(seconds: stateStore.state.route.elapsed))
+          .font(.system(size: 32.0,
+                        weight: .regular,
+                        design: .monospaced))
+          .frame(alignment: .trailing)
+          .padding(.trailing, 10.0)
+      }
+    }
+      .padding(.bottom, 4.0)
   }
 }
 
 struct AppView_Previews: PreviewProvider {
   static var previews: some View {
     let testState = AppStateController(filename: "route.json")
+    testState.handlePermissionsResult(hasPermissions: true)
     return AppView().environmentObject(testState)
   }
 }

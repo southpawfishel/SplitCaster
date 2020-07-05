@@ -31,7 +31,7 @@ class AppStateController: ObservableObject {
         let decoder = JSONDecoder()
         let json = try Data.init(contentsOf: url)
         let route = try decoder.decode(RouteModel.self, from: json)
-        state = state.route(route.currentRun(route.splits)).state(.stopped)
+        state = state.route(route.currentRun(route.splits)).runInProgress(false)
       } catch {
         print("Error loading json: \(error)")
       }
@@ -52,8 +52,8 @@ class AppStateController: ObservableObject {
   /**
    * Handle permissions received event and update app state accordingly
    */
-  private func handlePermissionsResult(hasPermissions: Bool) -> Void {
-    state = state.state((hasPermissions ? .stopped : .needsPermissions))
+  func handlePermissionsResult(hasPermissions: Bool) -> Void {
+    state = state.hasPermissions(hasPermissions)
   }
 
   /**
@@ -61,7 +61,7 @@ class AppStateController: ObservableObject {
    */
   public func registerForEvents() -> Void {
     acquireGlobalKeyEventPermissions()
-    if state.state != .needsPermissions {
+    if state.hasPermissions {
       _globalEventMonitor = NSEvent.addGlobalMonitorForEvents(
         matching: NSEvent.EventTypeMask.keyDown, handler: handleGlobalKeyEvent)
       _localEventMonitor = NSEvent.addLocalMonitorForEvents(
@@ -101,30 +101,52 @@ class AppStateController: ObservableObject {
   }
 
   private func handleSplitKeyPressed(timestamp: Double) {
-    if (state.state == .stopped) {
+    if (!state.runInProgress) {
+      // Initially populate current run with default splits data, start on split 0, increment attempt count
       state = state.route(state.route
         .currentRun(state.route.splits)
         .currentSplit(0)
         .attemptCount(1 + state.route.attemptCount))
-      let currentSplit = state.route.currentSplit
+
+      // Set start of first split to event timestamp, end to current time
+      // (This might be called a millisecond or so after the initial event)
+      let curSplitIndex = state.route.currentSplit
+      let updatedCurSplit = state.route.currentRun[curSplitIndex]
+        .startTimestamp(timestamp)
+        .globalStartTimestamp(timestamp)
+        .endTimestamp(ProcessInfo.processInfo.systemUptime)
       state = state.route(state.route.currentRun(
-        state.route.currentRun.arrayByReplacing(index: currentSplit, with: state.route.currentRun[currentSplit]
-          .startTimestamp(timestamp)
-          .endTimestamp(ProcessInfo.processInfo.systemUptime))))
-      state = state.state(.running)
+        state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+
+      // Update that the run is now in progress
+      state = state.runInProgress(true)
 
       startUpdateTimer()
-    } else if (state.state == .running) {
-      if (state.route.currentSplit == state.route.splits.count - 1) {
-        // Handle last split
-        // TODO: update final split time
-        // TODO: update pb if necessary
-        state = state.state(.stopped)
+    } else if (state.runInProgress) {
+      // Update current split's end timestamp to the event timestamp,
+      let curSplitIndex = state.route.currentSplit
+      let updatedCurSplit = state.route.currentRun[curSplitIndex]
+        .endTimestamp(timestamp)
+      state = state.route(state.route.currentRun(
+        state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+
+      // TODO: check if this is our best split time, save best split time
+
+      if (curSplitIndex == state.route.splits.count - 1) {
+        // TODO: update route pb if necessary
+
+        // Run is now no longer in progress
+        state = state.runInProgress(false)
+        stopUpdateTimer()
       } else {
-        // Handle all other splits
-        // TODO: update current and next split times
-        // TODO: check if this is our best split time, save best split time
-        // TODO: move on to next split
+        // Update nest split's start timestamp to the event timestamp
+        let updatedNextSplit = state.route.currentRun[1 + curSplitIndex]
+          .startTimestamp(timestamp)
+          .globalStartTimestamp(state.route.currentRun[0].startTimestamp!)
+          .endTimestamp(ProcessInfo.processInfo.systemUptime)
+        state = state.route(state.route.currentRun(
+          state.route.currentRun.arrayByReplacing(index: 1 + curSplitIndex, with: updatedNextSplit)))
+        state = state.route(state.route.currentSplit(1 + curSplitIndex))
       }
     }
   }
@@ -134,7 +156,7 @@ class AppStateController: ObservableObject {
    */
   private func startUpdateTimer() {
     stopUpdateTimer()
-    _timer = Timer.scheduledTimer(withTimeInterval: (1 / 60.0), repeats: true, block: handleTimerUpdate)
+    _timer = Timer.scheduledTimer(withTimeInterval: (1 / 30.0), repeats: true, block: handleTimerUpdate)
   }
 
   /**

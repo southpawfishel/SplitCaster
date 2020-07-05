@@ -15,7 +15,7 @@ extension SplitModel {
                       bestTime: self.bestTime,
                       startTimestamp: self.startTimestamp,
                       endTimestamp: self.endTimestamp,
-                      currentTimestamp: self.currentTimestamp)
+                      globalStartTimestamp: self.globalStartTimestamp)
   }
 
   public func name(_ newName: String!) -> SplitModel {
@@ -24,7 +24,7 @@ extension SplitModel {
                       bestTime: self.bestTime,
                       startTimestamp: self.startTimestamp,
                       endTimestamp: self.endTimestamp,
-                      currentTimestamp: self.currentTimestamp)
+                      globalStartTimestamp: self.globalStartTimestamp)
   }
 
   public func iconFilename(_ newFilename: String!) -> SplitModel {
@@ -33,7 +33,7 @@ extension SplitModel {
                       bestTime: self.bestTime,
                       startTimestamp: self.startTimestamp,
                       endTimestamp: self.endTimestamp,
-                      currentTimestamp: self.currentTimestamp)
+                      globalStartTimestamp: self.globalStartTimestamp)
   }
 
   public func bestTime(_ newBestTime: Double) -> SplitModel {
@@ -42,7 +42,7 @@ extension SplitModel {
                       bestTime: newBestTime,
                       startTimestamp: self.startTimestamp,
                       endTimestamp: self.endTimestamp,
-                      currentTimestamp: self.currentTimestamp)
+                      globalStartTimestamp: self.globalStartTimestamp)
   }
 
   public func startTimestamp(_ newStart: Double) -> SplitModel {
@@ -51,7 +51,7 @@ extension SplitModel {
                       bestTime: self.bestTime,
                       startTimestamp: newStart,
                       endTimestamp: self.endTimestamp,
-                      currentTimestamp: self.currentTimestamp)
+                      globalStartTimestamp: self.globalStartTimestamp)
   }
 
   public func endTimestamp(_ newEnd: Double) -> SplitModel {
@@ -60,15 +60,15 @@ extension SplitModel {
                       bestTime: self.bestTime,
                       startTimestamp: self.startTimestamp,
                       endTimestamp: newEnd,
-                      currentTimestamp: self.currentTimestamp)
+                      globalStartTimestamp: self.globalStartTimestamp)
   }
 
-  public func currentTimestamp(_ newTimestamp: Double) -> SplitModel {
+  public func globalStartTimestamp(_ newTimestamp: Double) -> SplitModel {
     return SplitModel(name: self.name,
                       iconFilename: self.iconFilename,
                       bestTime: self.bestTime,
                       startTimestamp: self.startTimestamp,
                       endTimestamp: self.endTimestamp,
-                      currentTimestamp: newTimestamp)
+                      globalStartTimestamp: newTimestamp)
   }
 }

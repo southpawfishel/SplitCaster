@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct SplitRow: View {
+  static let height: CGFloat = 44.0
+
   var split: SplitModel
 
   var body: some View {
@@ -22,19 +24,24 @@ struct SplitRow: View {
           .offset(x: 10.0)
       }
       Text(split.name)
-        .font(.title)
-        .offset(x: 20.0)
+        .font(.system(size: 20.0,
+                      weight: .regular,
+                      design: .default))
+        .offset(x: 10.0)
         .frame(alignment: .leading)
       Spacer()
-      Text("-")
-        .font(.system(.headline, design: .monospaced))
-        .padding(20.0)
-        .frame(width: 120.0, alignment: .trailing)
-      Text(TimeFormatting.formatDuration(seconds: split.elapsed))
-        .font(.system(.headline, design: .monospaced))
-        .padding(20.0)
-        .frame(width: 120.0, alignment: .trailing)
-    }.frame(height: 60.0)
+      Text(TimeFormatting.formatDurationHMS(seconds: split.elapsed))
+        .font(.system(size: 16.0,
+                      weight: .regular,
+                      design: .monospaced))
+        .frame(width: 90, alignment: .trailing)
+      Text(TimeFormatting.formatDurationHMS(seconds: split.globalElapsed))
+        .font(.system(size: 16.0,
+                      weight: .regular,
+                      design: .monospaced))
+        .padding(10.0)
+        .frame(width: 90, alignment: .trailing)
+    }.frame(height: SplitRow.height)
   }
 }
 
@@ -43,8 +50,8 @@ struct SplitRow_Previews: PreviewProvider {
     SplitRow(split: SplitModel(name: "BOB (1)",
                                iconFilename: "bob6",
                                bestTime: 0,
-                               startTimestamp: 0,
-                               endTimestamp: 12.3,
-                               currentTimestamp: 0))
+                               startTimestamp: 1000.0,
+                               endTimestamp: 4801.3,
+                               globalStartTimestamp: 0))
   }
 }

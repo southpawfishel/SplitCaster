@@ -20,4 +20,13 @@ public struct RouteModel: Codable, Equatable {
   // Ephemeral properties
   public let currentSplit: Int
   public let currentRun: [SplitModel]
+
+  // Computed properties
+  public var elapsed: Double? {
+    if let start = currentRun[0].startTimestamp, let end = currentRun[currentSplit].endTimestamp {
+      return end - start
+    } else {
+      return nil
+    }
+  }
 }

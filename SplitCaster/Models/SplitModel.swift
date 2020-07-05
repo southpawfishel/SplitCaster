@@ -17,11 +17,18 @@ public struct SplitModel: Codable, Equatable {
   // Ephemeral properties
   public let startTimestamp: Double?
   public let endTimestamp: Double?
-  public let currentTimestamp: Double?
+  public let globalStartTimestamp: Double?
 
   // Computed properties
   public var elapsed: Double? {
     if let start = startTimestamp, let end = endTimestamp {
+      return end - start
+    } else {
+      return nil
+    }
+  }
+  public var globalElapsed: Double? {
+    if let start = globalStartTimestamp, let end = endTimestamp {
       return end - start
     } else {
       return nil
