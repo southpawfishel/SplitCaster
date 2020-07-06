@@ -8,6 +8,12 @@
 
 import Foundation
 
+/// A model representing an individual split of a route
+///
+/// This is the abstract data for a split, the specific data for a split
+/// during a run, with specific start/end times, and also an owner
+/// for the best possible time ever for a split, which is not necessarily
+/// the same as the time for this split in the overall fastest run.
 public struct SplitModel: Codable, Equatable {
   ///
   /// Persistable  properties

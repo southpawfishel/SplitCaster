@@ -8,6 +8,9 @@
 
 import Foundation
 
+/// The model representing the entire app's state
+///
+/// Mostly this is just all the route data plus a few odds and ends
 public struct AppState: Equatable {
   /// Whether or not the app has global key event permissions
   public let hasPermissions: Bool

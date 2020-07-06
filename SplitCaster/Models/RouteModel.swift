@@ -8,6 +8,11 @@
 
 import Foundation
 
+/// The model that represents a route
+///
+/// A route is mostly the splits that it's comprised of, and this owns the
+/// data for a specific run, as well as the abstract split data for all runs.
+/// Also owns the data about the best run ever for this route.
 public struct RouteModel: Codable, Equatable {
   ///
   /// Persistable properties

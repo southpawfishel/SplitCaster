@@ -11,8 +11,8 @@ import Foundation
 
 /// This class essentially owns the business logic of the application.
 ///
-/// It exposes a readonly app state that the SwiftUI views use to draw the screen, and handles all app state mutations
-/// in response to keyboard events and timer updates.
+/// It exposes a readonly app state that the SwiftUI views use to draw the screen,
+/// and handles all app state mutations in response to keyboard events and timer updates.
 class AppStateController: ObservableObject {
   @Published public private(set) var state: AppState = AppState()
 
@@ -99,67 +99,90 @@ class AppStateController: ObservableObject {
     return event
   }
 
+  ///
+  /// Takes in keyboard events and determines if they should be translated
+  /// to events that can update the app's state
+  ///
   private func handleKeyEvent(event: NSEvent) {
+    // print(
+    //   "event time: \(event.timestamp), uptime: \(ProcessInfo.processInfo.systemUptime), keycode: \(event.keyCode)"
+    // )
     if event.keyCode == Keycode.space {
-      //      print("event time: \(event.timestamp), uptime: \(ProcessInfo.processInfo.systemUptime), keycode: \(event.keyCode)")
       handleSplitKeyPressed(timestamp: event.timestamp)
     }
   }
 
   private func handleSplitKeyPressed(timestamp: Double) {
-    if !state.runInProgress {
+    let oldRunInProgress = state.runInProgress
+    state = splitEventUpdateReducer(curState: state, timestamp: timestamp)
+
+    // Do the side effect of start/stop timer independent of state reducer
+    if state.runInProgress != oldRunInProgress {
+      if state.runInProgress {
+        startUpdateTimer()
+      } else {
+        stopUpdateTimer()
+      }
+    }
+  }
+
+  ///
+  /// Takes in the current state and the time at which the split event
+  /// occurred, and produces an updated app state.
+  ///
+  private func splitEventUpdateReducer(curState: AppState, timestamp: Double) -> AppState {
+    var newState = curState
+    if !newState.runInProgress {
       // Initially populate current run with default splits data, start on split 0, increment attempt count
-      state = state.route(
-        state.route
-          .currentRun(state.route.splits)
+      newState = newState.route(
+        newState.route
+          .currentRun(newState.route.splits)
           .currentSplit(0)
-          .attemptCount(1 + state.route.attemptCount))
+          .attemptCount(1 + newState.route.attemptCount))
 
       // Set start of first split to event timestamp, end to current time
       // (This might be called a millisecond or so after the initial event)
-      let curSplitIndex = state.route.currentSplit
-      let updatedCurSplit = state.route.currentRun[curSplitIndex]
+      let curSplitIndex = newState.route.currentSplit
+      let updatedCurSplit = newState.route.currentRun[curSplitIndex]
         .startTimestamp(timestamp)
         .globalStartTimestamp(timestamp)
         .endTimestamp(ProcessInfo.processInfo.systemUptime)
-      state = state.route(
-        state.route.currentRun(
-          state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+      newState = newState.route(
+        newState.route.currentRun(
+          newState.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
 
       // Update that the run is now in progress
-      state = state.runInProgress(true)
-
-      startUpdateTimer()
-    } else if (state.runInProgress) {
+      newState = newState.runInProgress(true)
+    } else if (newState.runInProgress) {
       // Update current split's end timestamp to the event timestamp,
       let curSplitIndex = state.route.currentSplit
       let updatedCurSplit = state.route.currentRun[curSplitIndex]
         .endTimestamp(timestamp)
-      state = state.route(
-        state.route.currentRun(
-          state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+      newState = newState.route(
+        newState.route.currentRun(
+          newState.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
 
       // TODO: check if this is our best split time, save best split time
 
-      if (curSplitIndex == state.route.splits.count - 1) {
+      if (curSplitIndex == newState.route.splits.count - 1) {
         // TODO: update route pb if necessary
 
         // Run is now no longer in progress
-        state = state.runInProgress(false)
-        stopUpdateTimer()
+        newState = newState.runInProgress(false)
       } else {
         // Update nest split's start timestamp to the event timestamp
-        let updatedNextSplit = state.route.currentRun[1 + curSplitIndex]
+        let updatedNextSplit = newState.route.currentRun[1 + curSplitIndex]
           .startTimestamp(timestamp)
-          .globalStartTimestamp(state.route.currentRun[0].startTimestamp!)
+          .globalStartTimestamp(newState.route.currentRun[0].startTimestamp!)
           .endTimestamp(ProcessInfo.processInfo.systemUptime)
-        state = state.route(
-          state.route.currentRun(
-            state.route.currentRun.arrayByReplacing(
+        newState = newState.route(
+          newState.route.currentRun(
+            newState.route.currentRun.arrayByReplacing(
               index: 1 + curSplitIndex, with: updatedNextSplit)))
-        state = state.route(state.route.currentSplit(1 + curSplitIndex))
+        newState = newState.route(newState.route.currentSplit(1 + curSplitIndex))
       }
     }
+    return newState
   }
 
   ///
@@ -182,15 +205,23 @@ class AppStateController: ObservableObject {
   }
 
   ///
-  /// Grabs the current time to update the current split
+  /// Timer callback function
   ///
   private func handleTimerUpdate(timer: Timer) {
-    let currentSplit = state.route.currentSplit
-    state = state.route(
-      state.route.currentRun(
-        state.route.currentRun.arrayByReplacing(
+    state = timerUpdateReducer(curState: state, currentTime: ProcessInfo.processInfo.systemUptime)
+  }
+
+  ///
+  /// Take in the current app state and time and produce a new state with updated
+  /// splits given the current time
+  ///
+  private func timerUpdateReducer(curState: AppState, currentTime: Double) -> AppState {
+    let currentSplit = curState.route.currentSplit
+    return curState.route(
+      curState.route.currentRun(
+        curState.route.currentRun.arrayByReplacing(
           index: currentSplit,
-          with: state.route.currentRun[currentSplit]
-            .endTimestamp(ProcessInfo.processInfo.systemUptime))))
+          with: curState.route.currentRun[currentSplit]
+            .endTimestamp(currentTime))))
   }
 }
