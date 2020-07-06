@@ -9,9 +9,8 @@ more generic.
 Mostly for me this was an opportunity to hack around with SwiftUI and try some
 functional techniques for building a Swift app in that style.
 
-[Split images for Mario 64 were created by KitSovereign](https://deviantart.tumblr.com/post/26571196445/stars-by-kitsovereign)
-License for these images is unconfirmed but assumed to be public domain given
-that the original DeviantArt account is deactivated.
+[Split images for Mario 64 were created by KitSovereign](https://deviantart.tumblr.com/post/26571196445/stars-by-kitsovereign). 
+License for these images is unconfirmed but assumed to be public domain given that the original DeviantArt account is deactivated.
 
 However, KitSovereign's art is sweet so follow them on Twitter and support
 their art! https://twitter.com/kitsovereign
