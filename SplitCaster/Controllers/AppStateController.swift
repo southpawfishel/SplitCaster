@@ -9,12 +9,10 @@
 import AppKit
 import Foundation
 
-/**
- * This class essentially owns the business logic of the application.
- *
- * It exposes a readonly app state that the SwiftUI views use to draw the screen, and handles all app state mutations
- * in response to keyboard events and timer updates.
- */
+/// This class essentially owns the business logic of the application.
+///
+/// It exposes a readonly app state that the SwiftUI views use to draw the screen, and handles all app state mutations
+/// in response to keyboard events and timer updates.
 class AppStateController: ObservableObject {
   @Published public private(set) var state: AppState = AppState()
 
@@ -26,13 +24,15 @@ class AppStateController: ObservableObject {
     loadRouteFromFile(filename: filename)
   }
 
-  /**
-   * Load the route data from the given file name and assign it to the current state
-   */
-  public func loadRouteFromFile(filename: String!) -> Void {
+  ///
+  /// Load the route data from the given file name and assign it to the current state
+  ///
+  public func loadRouteFromFile(filename: String!) {
     let splitFilename = filename.split(separator: ".")
-    if let url = Bundle.main.url(forResource: String(splitFilename[0]),
-                                 withExtension: String(splitFilename[1])) {
+    if let url = Bundle.main.url(
+      forResource: String(splitFilename[0]),
+      withExtension: String(splitFilename[1]))
+    {
       do {
         let decoder = JSONDecoder()
         let json = try Data.init(contentsOf: url)
@@ -44,28 +44,28 @@ class AppStateController: ObservableObject {
     }
   }
 
-  /**
-   * Checks if we have global keyboard permissions (so we can check key events while our app doesn't have focus)
-   *
-   * If this check fails, user needs to grant the permission and restart the app
-   */
-  private func acquireGlobalKeyEventPermissions() -> Void {
+  ///
+  /// Checks if we have global keyboard permissions (so we can check key events while our app doesn't have focus)
+  ///
+  /// If this check fails, user needs to grant the permission and restart the app
+  ///
+  private func acquireGlobalKeyEventPermissions() {
     let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
     let hasGlobalKeyEventAccess = AXIsProcessTrustedWithOptions(options)
     handlePermissionsResult(hasPermissions: hasGlobalKeyEventAccess)
   }
 
-  /**
-   * Handle permissions received event and update app state accordingly
-   */
-  func handlePermissionsResult(hasPermissions: Bool) -> Void {
+  ///
+  /// Handle permissions received event and update app state accordingly
+  ///
+  func handlePermissionsResult(hasPermissions: Bool) {
     state = state.hasPermissions(hasPermissions)
   }
 
-  /**
-   * Registers our controller for global key events
-   */
-  public func registerForEvents() -> Void {
+  ///
+  /// Registers our controller for global key events
+  ///
+  public func registerForEvents() {
     acquireGlobalKeyEventPermissions()
     if state.hasPermissions {
       _globalEventMonitor = NSEvent.addGlobalMonitorForEvents(
@@ -75,10 +75,10 @@ class AppStateController: ObservableObject {
     }
   }
 
-  /**
-   * Deregisters our controller for global key events
-   */
-  public func unregisterForEvents() -> Void {
+  ///
+  /// Deregisters our controller for global key events
+  ///
+  public func unregisterForEvents() {
     if let globalMonitor: Any = _globalEventMonitor {
       NSEvent.removeMonitor(globalMonitor)
     }
@@ -87,10 +87,10 @@ class AppStateController: ObservableObject {
     }
   }
 
-  /**
-   * Handle key events and update app state accordingly
-   */
-  private func handleGlobalKeyEvent(event: NSEvent) -> Void {
+  ///
+  /// Handle key events and update app state accordingly
+  ///
+  private func handleGlobalKeyEvent(event: NSEvent) {
     handleKeyEvent(event: event)
   }
 
@@ -100,19 +100,20 @@ class AppStateController: ObservableObject {
   }
 
   private func handleKeyEvent(event: NSEvent) {
-    if (event.keyCode == Keycode.space) {
-//      print("event time: \(event.timestamp), uptime: \(ProcessInfo.processInfo.systemUptime), keycode: \(event.keyCode)")
+    if event.keyCode == Keycode.space {
+      //      print("event time: \(event.timestamp), uptime: \(ProcessInfo.processInfo.systemUptime), keycode: \(event.keyCode)")
       handleSplitKeyPressed(timestamp: event.timestamp)
     }
   }
 
   private func handleSplitKeyPressed(timestamp: Double) {
-    if (!state.runInProgress) {
+    if !state.runInProgress {
       // Initially populate current run with default splits data, start on split 0, increment attempt count
-      state = state.route(state.route
-        .currentRun(state.route.splits)
-        .currentSplit(0)
-        .attemptCount(1 + state.route.attemptCount))
+      state = state.route(
+        state.route
+          .currentRun(state.route.splits)
+          .currentSplit(0)
+          .attemptCount(1 + state.route.attemptCount))
 
       // Set start of first split to event timestamp, end to current time
       // (This might be called a millisecond or so after the initial event)
@@ -121,8 +122,9 @@ class AppStateController: ObservableObject {
         .startTimestamp(timestamp)
         .globalStartTimestamp(timestamp)
         .endTimestamp(ProcessInfo.processInfo.systemUptime)
-      state = state.route(state.route.currentRun(
-        state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+      state = state.route(
+        state.route.currentRun(
+          state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
 
       // Update that the run is now in progress
       state = state.runInProgress(true)
@@ -133,8 +135,9 @@ class AppStateController: ObservableObject {
       let curSplitIndex = state.route.currentSplit
       let updatedCurSplit = state.route.currentRun[curSplitIndex]
         .endTimestamp(timestamp)
-      state = state.route(state.route.currentRun(
-        state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+      state = state.route(
+        state.route.currentRun(
+          state.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
 
       // TODO: check if this is our best split time, save best split time
 
@@ -150,24 +153,27 @@ class AppStateController: ObservableObject {
           .startTimestamp(timestamp)
           .globalStartTimestamp(state.route.currentRun[0].startTimestamp!)
           .endTimestamp(ProcessInfo.processInfo.systemUptime)
-        state = state.route(state.route.currentRun(
-          state.route.currentRun.arrayByReplacing(index: 1 + curSplitIndex, with: updatedNextSplit)))
+        state = state.route(
+          state.route.currentRun(
+            state.route.currentRun.arrayByReplacing(
+              index: 1 + curSplitIndex, with: updatedNextSplit)))
         state = state.route(state.route.currentSplit(1 + curSplitIndex))
       }
     }
   }
 
-  /**
-   * Starts the update timer which will update the model each time it fires
-   */
+  ///
+  /// Starts the update timer which will update the model each time it fires
+  ///
   private func startUpdateTimer() {
     stopUpdateTimer()
-    _timer = Timer.scheduledTimer(withTimeInterval: (1 / 30.0), repeats: true, block: handleTimerUpdate)
+    _timer = Timer.scheduledTimer(
+      withTimeInterval: (1 / 30.0), repeats: true, block: handleTimerUpdate)
   }
 
-  /**
-   * Stops the update timer. No-op if timer is nil
-   */
+  ///
+  /// Stops the update timer. No-op if timer is nil
+  ///
   private func stopUpdateTimer() {
     if let timer = _timer {
       timer.invalidate()
@@ -175,13 +181,16 @@ class AppStateController: ObservableObject {
     }
   }
 
-  /**
-   * Grabs the current time to update the current split
-   */
+  ///
+  /// Grabs the current time to update the current split
+  ///
   private func handleTimerUpdate(timer: Timer) {
     let currentSplit = state.route.currentSplit
-    state = state.route(state.route.currentRun(
-      state.route.currentRun.arrayByReplacing(index: currentSplit, with: state.route.currentRun[currentSplit]
-        .endTimestamp(ProcessInfo.processInfo.systemUptime))))
+    state = state.route(
+      state.route.currentRun(
+        state.route.currentRun.arrayByReplacing(
+          index: currentSplit,
+          with: state.route.currentRun[currentSplit]
+            .endTimestamp(ProcessInfo.processInfo.systemUptime))))
   }
 }

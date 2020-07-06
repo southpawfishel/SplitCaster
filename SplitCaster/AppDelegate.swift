@@ -40,9 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     _appStateController.unregisterForEvents()
   }
 
-
 }
-
 
 struct AppDelegate_Previews: PreviewProvider {
   static var previews: some View {

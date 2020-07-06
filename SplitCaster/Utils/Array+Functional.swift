@@ -9,12 +9,12 @@
 import Foundation
 
 extension Array {
-  /**
-   * An method for replacing an element in an array when using immutable arrays
-   *
-   * Will return a copy of the original array with the element at "index" replaced by "with", or just a copy of the original
-   * if the index passed in is outside the bounds of the array
-   */
+  ///
+  /// An method for replacing an element in an array when using immutable arrays
+  ///
+  /// Will return a copy of the original array with the element at "index" replaced by "with", or just a copy of the original
+  /// if the index passed in is outside the bounds of the array
+  ///
   func arrayByReplacing(index toReplace: Int, with newElement: Element) -> [Element] {
     self.enumerated().map { (i, existingElement) in
       i == toReplace ? newElement : existingElement

@@ -10,20 +10,23 @@ import Foundation
 
 extension AppState {
   public func hasPermissions(_ newHasPermissions: Bool) -> AppState {
-    return AppState(hasPermissions: newHasPermissions,
-                    runInProgress: self.runInProgress,
-                    route: self.route)
+    return AppState(
+      hasPermissions: newHasPermissions,
+      runInProgress: self.runInProgress,
+      route: self.route)
   }
 
   public func runInProgress(_ newRunInProgress: Bool) -> AppState {
-    return AppState(hasPermissions: self.hasPermissions,
-                    runInProgress: newRunInProgress,
-                    route: self.route)
+    return AppState(
+      hasPermissions: self.hasPermissions,
+      runInProgress: newRunInProgress,
+      route: self.route)
   }
 
   public func route(_ newRoute: RouteModel!) -> AppState {
-    return AppState(hasPermissions: self.hasPermissions,
-                    runInProgress: self.runInProgress,
-                    route: newRoute)
+    return AppState(
+      hasPermissions: self.hasPermissions,
+      runInProgress: self.runInProgress,
+      route: newRoute)
   }
 }

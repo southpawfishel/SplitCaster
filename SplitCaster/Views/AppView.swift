@@ -34,29 +34,36 @@ struct AppView: View {
   var SplitsHeader: some View {
     VStack {
       Text(stateStore.state.route.gameName)
-        .font(.system(size: 22.0,
-                      weight: .regular,
-                      design: .default))
+        .font(
+          .system(
+            size: 22.0,
+            weight: .regular,
+            design: .default))
       ZStack {
         HStack {
           Text(stateStore.state.route.name)
             .frame(alignment: .center)
-            .font(.system(size: 20.0,
-                          weight: .regular,
-                          design: .default))
+            .font(
+              .system(
+                size: 20.0,
+                weight: .regular,
+                design: .default))
         }
         HStack {
           Spacer()
           Text(String(stateStore.state.route.attemptCount))
-            .font(.system(size: 20.0,
-                          weight: .regular,
-                          design: .default))
+            .font(
+              .system(
+                size: 20.0,
+                weight: .regular,
+                design: .default)
+            )
             .frame(alignment: .trailing)
             .padding(.trailing, 10.0)
         }
       }
     }
-      .padding(.top, 4.0)
+    .padding(.top, 4.0)
   }
 
   var SplitsFooter: some View {
@@ -64,22 +71,28 @@ struct AppView: View {
       HStack {
         Spacer()
         Text(TimeFormatting.formatDurationHMSMS(seconds: stateStore.state.route.elapsed))
-          .font(.system(size: 32.0,
-                        weight: .regular,
-                        design: .monospaced))
+          .font(
+            .system(
+              size: 32.0,
+              weight: .regular,
+              design: .monospaced)
+          )
           .frame(alignment: .trailing)
           .padding(.trailing, 10.0)
       }
     }
-      .padding(.bottom, 4.0)
+    .padding(.bottom, 4.0)
   }
 
   var PermissionsScreen: some View {
     GeometryReader { g in
       HStack {
-        Text("You must grant permissions to read global keyboard events in order to use this app. Please do so in the Accessibility Settings and re-launch the app")
-          .frame(width: g.size.width * 0.5,
-                 height: g.size.height)
+        Text(
+          "You must grant permissions to read global keyboard events in order to use this app. Please do so in the Accessibility Settings and re-launch the app"
+        )
+        .frame(
+          width: g.size.width * 0.5,
+          height: g.size.height)
       }
     }
   }
