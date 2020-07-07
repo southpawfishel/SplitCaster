@@ -15,19 +15,27 @@ import Foundation
 /// and handles all app state mutations in response to keyboard events and timer updates.
 class AppStateController: ObservableObject {
   @Published public private(set) var state: AppState = AppState()
+  public static let routeFilename = "mario64.json"
 
   private var _globalEventMonitor: Any?
   private var _localEventMonitor: Any?
   private var _timer: Timer? = nil
 
   public init(filename: String!) {
-    loadRouteFromFile(filename: filename)
+    let dataDirPath = NSString(string: "SplitCasterData").appendingPathComponent(filename)
+    if let route = loadRouteFromDocumentsPath(path: dataDirPath) {
+      state = state.route(route.currentRun(route.splits)).runInProgress(false)
+    } else if let route = loadRouteFromBundle(filename: filename) {
+      state = state.route(route.currentRun(route.splits)).runInProgress(false)
+    } else {
+      print("Failed to load route from \(filename!)!")
+    }
   }
 
   ///
   /// Load the route data from the given file name and assign it to the current state
   ///
-  public func loadRouteFromFile(filename: String!) {
+  public func loadRouteFromBundle(filename: String) -> RouteModel? {
     let splitFilename = filename.split(separator: ".")
     if let url = Bundle.main.url(
       forResource: String(splitFilename[0]),
@@ -37,10 +45,44 @@ class AppStateController: ObservableObject {
         let decoder = JSONDecoder()
         let json = try Data.init(contentsOf: url)
         let route = try decoder.decode(RouteModel.self, from: json)
-        state = state.route(route.currentRun(route.splits)).runInProgress(false)
+        return route
       } catch {
-        print("Error loading json: \(error)")
+        print("Error loading bundle json: \(error)")
       }
+    }
+    return nil
+  }
+
+  ///
+  /// Load the route data from the given path (assumed to be in the documents directory) and assign it to the current state
+  ///
+  public func loadRouteFromDocumentsPath(path: String) -> RouteModel? {
+    let url = URL(
+      fileURLWithPath: (FileUtils.getDocumentsPath() as NSString).appendingPathComponent(path))
+    do {
+      let decoder = JSONDecoder()
+      let json = try Data.init(contentsOf: url)
+      let route = try decoder.decode(RouteModel.self, from: json)
+      return route
+    } catch {
+      print("Error loading json: \(url)")
+    }
+    return nil
+  }
+
+  ///
+  /// Save the current route state to the documents dir
+  ///
+  public func saveRouteToDocuments(path: String) {
+    let url = URL(
+      fileURLWithPath: (FileUtils.getDocumentsPath() as NSString).appendingPathComponent(path))
+    do {
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = .prettyPrinted
+      let json = try encoder.encode(state.route)
+      try json.write(to: url)
+    } catch {
+      print("Error saving json: \(url)")
     }
   }
 
@@ -169,6 +211,11 @@ class AppStateController: ObservableObject {
 
         // Run is now no longer in progress
         newState = newState.runInProgress(false)
+
+        // Save data to disk
+        let dataDirPath = NSString(string: "SplitCasterData").appendingPathComponent(
+          AppStateController.routeFilename)
+        saveRouteToDocuments(path: dataDirPath)
       } else {
         // Update nest split's start timestamp to the event timestamp
         let updatedNextSplit = newState.route.currentRun[1 + curSplitIndex]

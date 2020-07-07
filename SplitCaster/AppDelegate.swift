@@ -15,11 +15,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   var window: NSWindow!
 
-  private var _appStateController: AppStateController = AppStateController(filename: "route.json")
+  private var _appStateController: AppStateController? = nil
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
+    // Create app data dir
+    FileUtils.createDirInDocumentsIfMissing(dirName: "SplitCasterData")
+    // Create initial app state
+    _appStateController = AppStateController(filename: AppStateController.routeFilename)
+
     // Create the SwiftUI view that provides the window contents.
-    let appView = AppView().environmentObject(_appStateController)
+    let appView = AppView().environmentObject(_appStateController!)
 
     // Create the window and set the content view.
     window = NSWindow(
@@ -32,19 +37,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     window.makeKeyAndOrderFront(nil)
 
     // Insert code here to initialize your application
-    _appStateController.registerForEvents()
+    _appStateController!.registerForEvents()
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {
     // Insert code here to tear down your application
-    _appStateController.unregisterForEvents()
+    _appStateController!.unregisterForEvents()
   }
 
 }
 
 struct AppDelegate_Previews: PreviewProvider {
   static var previews: some View {
-    let testState = AppStateController(filename: "route.json")
+    let testState = AppStateController(filename: AppStateController.routeFilename)
     testState.handlePermissionsResult(hasPermissions: true)
     return AppView().environmentObject(testState)
   }

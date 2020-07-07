@@ -12,7 +12,7 @@
 		5551755B24AC2A110092CA87 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755A24AC2A110092CA87 /* AppState.swift */; };
 		5551755D24AC31640092CA87 /* SplitModel+Updaters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */; };
 		5551755F24AC37C10092CA87 /* RouteModel+Updaters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551755E24AC37C10092CA87 /* RouteModel+Updaters.swift */; };
-		5551756424AD76E20092CA87 /* route.json in Resources */ = {isa = PBXBuildFile; fileRef = 5551756324AD76E20092CA87 /* route.json */; };
+		5551756424AD76E20092CA87 /* mario64.json in Resources */ = {isa = PBXBuildFile; fileRef = 5551756324AD76E20092CA87 /* mario64.json */; };
 		5551765924AD80990092CA87 /* AppState+Updaters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551765824AD80990092CA87 /* AppState+Updaters.swift */; };
 		5551765B24ADA95D0092CA87 /* AppStateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551765A24ADA95D0092CA87 /* AppStateController.swift */; };
 		5551765D24AE66D70092CA87 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551765C24AE66D70092CA87 /* AppView.swift */; };
@@ -20,6 +20,9 @@
 		5551768124AFB3830092CA87 /* Array+Functional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551768024AFB3830092CA87 /* Array+Functional.swift */; };
 		5551768324AFB9510092CA87 /* Keycodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551768224AFB9510092CA87 /* Keycodes.swift */; };
 		557240F024B1150F003EF379 /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557240EF24B1150F003EF379 /* TimeFormatting.swift */; };
+		557240F224B2E1D3003EF379 /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557240F124B2E1D3003EF379 /* FileUtils.swift */; };
+		557240F424B41B20003EF379 /* SplitModel+Encoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557240F324B41B20003EF379 /* SplitModel+Encoding.swift */; };
+		557240F624B41C85003EF379 /* RouteModel+Encoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557240F524B41C85003EF379 /* RouteModel+Encoding.swift */; };
 		559A727524A1CCE9006C7AE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559A727424A1CCE9006C7AE6 /* AppDelegate.swift */; };
 		559A727724A1CCEA006C7AE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 559A727624A1CCEA006C7AE6 /* Assets.xcassets */; };
 		559A727A24A1CCEA006C7AE6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 559A727824A1CCEA006C7AE6 /* MainMenu.xib */; };
@@ -31,7 +34,7 @@
 		5551755A24AC2A110092CA87 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplitModel+Updaters.swift"; sourceTree = "<group>"; };
 		5551755E24AC37C10092CA87 /* RouteModel+Updaters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteModel+Updaters.swift"; sourceTree = "<group>"; };
-		5551756324AD76E20092CA87 /* route.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = route.json; sourceTree = "<group>"; };
+		5551756324AD76E20092CA87 /* mario64.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mario64.json; sourceTree = "<group>"; };
 		5551765824AD80990092CA87 /* AppState+Updaters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Updaters.swift"; sourceTree = "<group>"; };
 		5551765A24ADA95D0092CA87 /* AppStateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateController.swift; sourceTree = "<group>"; };
 		5551765C24AE66D70092CA87 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
@@ -39,6 +42,9 @@
 		5551768024AFB3830092CA87 /* Array+Functional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Functional.swift"; sourceTree = "<group>"; };
 		5551768224AFB9510092CA87 /* Keycodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycodes.swift; sourceTree = "<group>"; };
 		557240EF24B1150F003EF379 /* TimeFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatting.swift; sourceTree = "<group>"; };
+		557240F124B2E1D3003EF379 /* FileUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
+		557240F324B41B20003EF379 /* SplitModel+Encoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplitModel+Encoding.swift"; sourceTree = "<group>"; };
+		557240F524B41C85003EF379 /* RouteModel+Encoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteModel+Encoding.swift"; sourceTree = "<group>"; };
 		559A727124A1CCE9006C7AE6 /* SplitCaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitCaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		559A727424A1CCE9006C7AE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		559A727624A1CCEA006C7AE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,7 +67,7 @@
 		5551756224AD76BE0092CA87 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				5551756324AD76E20092CA87 /* route.json */,
+				5551756324AD76E20092CA87 /* mario64.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -72,6 +78,7 @@
 				5551768024AFB3830092CA87 /* Array+Functional.swift */,
 				5551768224AFB9510092CA87 /* Keycodes.swift */,
 				557240EF24B1150F003EF379 /* TimeFormatting.swift */,
+				557240F124B2E1D3003EF379 /* FileUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -116,8 +123,10 @@
 				5551765824AD80990092CA87 /* AppState+Updaters.swift */,
 				5551755824A5D03B0092CA87 /* RouteModel.swift */,
 				5551755E24AC37C10092CA87 /* RouteModel+Updaters.swift */,
+				557240F524B41C85003EF379 /* RouteModel+Encoding.swift */,
 				5551755624A5CEB40092CA87 /* SplitModel.swift */,
 				5551755C24AC31640092CA87 /* SplitModel+Updaters.swift */,
+				557240F324B41B20003EF379 /* SplitModel+Encoding.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -198,7 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				559A727724A1CCEA006C7AE6 /* Assets.xcassets in Resources */,
-				5551756424AD76E20092CA87 /* route.json in Resources */,
+				5551756424AD76E20092CA87 /* mario64.json in Resources */,
 				559A727A24A1CCEA006C7AE6 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,7 +224,10 @@
 				5551765D24AE66D70092CA87 /* AppView.swift in Sources */,
 				5551767E24AEA4CD0092CA87 /* SplitRow.swift in Sources */,
 				5551755D24AC31640092CA87 /* SplitModel+Updaters.swift in Sources */,
+				557240F224B2E1D3003EF379 /* FileUtils.swift in Sources */,
+				557240F624B41C85003EF379 /* RouteModel+Encoding.swift in Sources */,
 				5551768124AFB3830092CA87 /* Array+Functional.swift in Sources */,
+				557240F424B41B20003EF379 /* SplitModel+Encoding.swift in Sources */,
 				5551755F24AC37C10092CA87 /* RouteModel+Updaters.swift in Sources */,
 				557240F024B1150F003EF379 /* TimeFormatting.swift in Sources */,
 				559A727524A1CCE9006C7AE6 /* AppDelegate.swift in Sources */,

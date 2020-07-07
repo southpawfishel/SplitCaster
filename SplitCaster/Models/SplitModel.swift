@@ -20,7 +20,7 @@ public struct SplitModel: Codable, Equatable {
   ///
 
   /// The name of this split
-  public let name: String!
+  public let name: String
   /// The name of the icon file to use for this split
   public let iconFilename: String?
   /// The best time ever recorded for this particular split

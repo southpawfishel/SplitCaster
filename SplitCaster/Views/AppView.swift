@@ -100,7 +100,7 @@ struct AppView: View {
 
 struct AppView_Previews: PreviewProvider {
   static var previews: some View {
-    let testState = AppStateController(filename: "route.json")
+    let testState = AppStateController(filename: AppStateController.routeFilename)
     testState.handlePermissionsResult(hasPermissions: true)
     return AppView().environmentObject(testState)
   }
