@@ -70,15 +70,18 @@ struct AppView: View {
     VStack {
       HStack {
         Spacer()
-        Text(TimeFormatting.formatDurationHMSMS(seconds: stateStore.state.route.elapsed))
-          .font(
-            .system(
-              size: 32.0,
-              weight: .regular,
-              design: .monospaced)
-          )
-          .frame(alignment: .trailing)
-          .padding(.trailing, 10.0)
+        Text(
+          TimeFormatting.formatDurationHMSMS(
+            seconds: RouteModel.totalTimeOfRun(stateStore.state.route.currentRun))
+        )
+        .font(
+          .system(
+            size: 32.0,
+            weight: .regular,
+            design: .monospaced)
+        )
+        .frame(alignment: .trailing)
+        .padding(.trailing, 10.0)
       }
     }
     .padding(.bottom, 4.0)

@@ -198,16 +198,29 @@ class AppStateController: ObservableObject {
     } else if (newState.runInProgress) {
       // Update current split's end timestamp to the event timestamp,
       let curSplitIndex = state.route.currentSplit
-      let updatedCurSplit = state.route.currentRun[curSplitIndex]
+      var updatedCurSplit = state.route.currentRun[curSplitIndex]
         .endTimestamp(timestamp)
+
+      // If the split time is better than our previous personal-best, update it
+      if let splitPb = updatedCurSplit.bestTime {
+        if updatedCurSplit.elapsed! < splitPb {
+          updatedCurSplit = updatedCurSplit.bestTime(updatedCurSplit.elapsed!)
+        }
+      } else {
+        updatedCurSplit = updatedCurSplit.bestTime(updatedCurSplit.elapsed!)
+      }
+
       newState = newState.route(
         newState.route.currentRun(
           newState.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
 
-      // TODO: check if this is our best split time, save best split time
-
       if (curSplitIndex == newState.route.splits.count - 1) {
-        // TODO: update route pb if necessary
+        // Update route personal-best if necessary
+        if let pbRunTime = RouteModel.totalTimeOfRun(newState.route.bestRun!) {
+          if RouteModel.totalTimeOfRun(newState.route.currentRun)! < pbRunTime {
+            newState = newState.route(newState.route.bestRun(newState.route.currentRun))
+          }
+        }
 
         // Run is now no longer in progress
         newState = newState.runInProgress(false)
