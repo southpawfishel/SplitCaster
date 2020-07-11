@@ -37,7 +37,7 @@ struct TimeFormatting {
     return [
       hours > 0 ? String(format: "%d:", hours) : "",
       minutes > 0 ? String(format: hours > 0 ? "%02d:" : "%d:", minutes) : "",
-      seconds > 0 ? String(format: hours > 0 || minutes > 0 ? "%02d." : "%d.", seconds) : "0.",
+      String(format: hours > 0 || minutes > 0 ? "%02d." : "%d.", seconds),
       String(format: "%02.0f", fraction * 100),
     ].joined()
   }
@@ -62,7 +62,7 @@ struct TimeFormatting {
     return [
       hours > 0 ? String(format: "%d:", hours) : "",
       minutes > 0 ? String(format: hours > 0 ? "%02d:" : "%d:", minutes) : "0:",
-      seconds > 0 ? String(format: "%02d", seconds) : "00",
+      String(format: "%02d", seconds),
     ].joined()
   }
 }
