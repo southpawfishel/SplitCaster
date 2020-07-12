@@ -13,69 +13,69 @@ extension SplitModel {
     return SplitModel(
       name: self.name,
       iconFilename: self.iconFilename,
-      bestTime: self.bestTime,
-      startTimestamp: self.startTimestamp,
-      endTimestamp: self.endTimestamp,
-      globalStartTimestamp: self.globalStartTimestamp)
+      bestElapsedTime: self.bestElapsedTime,
+      startTime: self.startTime,
+      endTime: self.endTime,
+      runStartTime: self.runStartTime)
   }
 
-  public func name(_ newName: String!) -> SplitModel {
+  public func withName(_ newName: String!) -> SplitModel {
     return SplitModel(
       name: newName,
       iconFilename: self.iconFilename,
-      bestTime: self.bestTime,
-      startTimestamp: self.startTimestamp,
-      endTimestamp: self.endTimestamp,
-      globalStartTimestamp: self.globalStartTimestamp)
+      bestElapsedTime: self.bestElapsedTime,
+      startTime: self.startTime,
+      endTime: self.endTime,
+      runStartTime: self.runStartTime)
   }
 
-  public func iconFilename(_ newFilename: String!) -> SplitModel {
+  public func withIconFilename(_ newFilename: String!) -> SplitModel {
     return SplitModel(
       name: self.name,
       iconFilename: newFilename,
-      bestTime: self.bestTime,
-      startTimestamp: self.startTimestamp,
-      endTimestamp: self.endTimestamp,
-      globalStartTimestamp: self.globalStartTimestamp)
+      bestElapsedTime: self.bestElapsedTime,
+      startTime: self.startTime,
+      endTime: self.endTime,
+      runStartTime: self.runStartTime)
   }
 
-  public func bestTime(_ newBestTime: Double) -> SplitModel {
+  public func withBestTime(_ newBestTime: Double) -> SplitModel {
     return SplitModel(
       name: self.name,
       iconFilename: self.iconFilename,
-      bestTime: newBestTime,
-      startTimestamp: self.startTimestamp,
-      endTimestamp: self.endTimestamp,
-      globalStartTimestamp: self.globalStartTimestamp)
+      bestElapsedTime: newBestTime,
+      startTime: self.startTime,
+      endTime: self.endTime,
+      runStartTime: self.runStartTime)
   }
 
-  public func startTimestamp(_ newStart: Double) -> SplitModel {
+  public func withStartTime(_ newStart: Double) -> SplitModel {
     return SplitModel(
       name: self.name,
       iconFilename: self.iconFilename,
-      bestTime: self.bestTime,
-      startTimestamp: newStart,
-      endTimestamp: self.endTimestamp,
-      globalStartTimestamp: self.globalStartTimestamp)
+      bestElapsedTime: self.bestElapsedTime,
+      startTime: newStart,
+      endTime: self.endTime,
+      runStartTime: self.runStartTime)
   }
 
-  public func endTimestamp(_ newEnd: Double) -> SplitModel {
+  public func withEndTime(_ newEnd: Double) -> SplitModel {
     return SplitModel(
       name: self.name,
       iconFilename: self.iconFilename,
-      bestTime: self.bestTime,
-      startTimestamp: self.startTimestamp,
-      endTimestamp: newEnd,
-      globalStartTimestamp: self.globalStartTimestamp)
+      bestElapsedTime: self.bestElapsedTime,
+      startTime: self.startTime,
+      endTime: newEnd,
+      runStartTime: self.runStartTime)
   }
 
-  public func globalStartTimestamp(_ newTimestamp: Double) -> SplitModel {
+  public func withRunStartTime(_ newTimestamp: Double) -> SplitModel {
     return SplitModel(
       name: self.name,
       iconFilename: self.iconFilename,
-      bestTime: self.bestTime,
-      startTimestamp: self.startTimestamp,
-      endTimestamp: self.endTimestamp,
-      globalStartTimestamp: newTimestamp)
+      bestElapsedTime: self.bestElapsedTime,
+      startTime: self.startTime,
+      endTime: self.endTime,
+      runStartTime: newTimestamp)
   }
 }

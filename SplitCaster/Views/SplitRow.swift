@@ -68,9 +68,9 @@ struct SplitRow_Previews: PreviewProvider {
       split: SplitModel(
         name: "BOB (1)",
         iconFilename: "bob6",
-        bestTime: 0,
-        startTimestamp: 1000.0,
-        endTimestamp: 4801.3,
-        globalStartTimestamp: 0), index: 0)
+        bestElapsedTime: 0,
+        startTime: 1000.0,
+        endTime: 4801.3,
+        runStartTime: 0), index: 0)
   }
 }

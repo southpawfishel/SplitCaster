@@ -24,9 +24,9 @@ class AppStateController: ObservableObject {
   public init(filename: String!) {
     let dataDirPath = NSString(string: "SplitCasterData").appendingPathComponent(filename)
     if let route = loadRouteFromDocumentsPath(path: dataDirPath) {
-      state = state.route(route.currentRun(route.splits)).runInProgress(false)
+      state = state.withRoute(route.withCurrentRun(route.splits)).withRunInProgress(false)
     } else if let route = loadRouteFromBundle(filename: filename) {
-      state = state.route(route.currentRun(route.splits)).runInProgress(false)
+      state = state.withRoute(route.withCurrentRun(route.splits)).withRunInProgress(false)
     } else {
       print("Failed to load route from \(filename!)!")
     }
@@ -101,7 +101,7 @@ class AppStateController: ObservableObject {
   /// Handle permissions received event and update app state accordingly
   ///
   func handlePermissionsResult(hasPermissions: Bool) {
-    state = state.hasPermissions(hasPermissions)
+    state = state.withPermissions(hasPermissions)
   }
 
   ///
@@ -157,11 +157,7 @@ class AppStateController: ObservableObject {
   private func handleSplitKeyPressed(timestamp: Double) {
     var shouldSave = false
     let oldRunInProgress = state.runInProgress
-    let oldState = state
-    state = splitEventUpdateReducer(curState: state, timestamp: timestamp)
-
-    // If splits have changed, it means we saved a new segment PB, so we should save
-    shouldSave = state.route.splits != oldState.route.splits
+    state = splitEventUpdateReducer(state, timestamp)
 
     // Do the side effect of start/stop timer independent of state reducer
     if state.runInProgress != oldRunInProgress {
@@ -169,12 +165,12 @@ class AppStateController: ObservableObject {
         startUpdateTimer()
       } else {
         stopUpdateTimer()
-        // If we're stopping timer, it means a run ended, so we should save
-        shouldSave = true
       }
+      // We want to save at the start or end of a run (start saves attempt count increase)
+      shouldSave = true
     }
 
-    // Save data to disk
+    // Save data to disk if we need to
     if shouldSave {
       let dataDirPath = NSString(string: "SplitCasterData").appendingPathComponent(
         AppStateController.routeFilename)
@@ -186,83 +182,141 @@ class AppStateController: ObservableObject {
   /// Takes in the current state and the time at which the split event
   /// occurred, and produces an updated app state.
   ///
-  private func splitEventUpdateReducer(curState: AppState, timestamp: Double) -> AppState {
-    var newState = curState
-    if !newState.runInProgress {
-      // Initially populate current run with default splits data, start on split 0, increment attempt count
-      newState = newState.route(
-        newState.route
-          .currentRun(newState.route.splits)
-          .currentSplit(0)
-          .attemptCount(1 + newState.route.attemptCount))
+  private func splitEventUpdateReducer(_ curState: AppState, _ timestamp: Double) -> AppState {
+    return curState.runInProgress
+      ? doNextSplitReducer(curState, timestamp)
+      : startNewRunReducer(curState, timestamp)
+  }
 
-      // Set start of first split to event timestamp, end to current time
-      // (This might be called a millisecond or so after the initial event)
-      let curSplitIndex = newState.route.currentSplit
-      let updatedCurSplit = newState.route.currentRun[curSplitIndex]
-        .startTimestamp(timestamp)
-        .globalStartTimestamp(timestamp)
-        .endTimestamp(ProcessInfo.processInfo.systemUptime)
-      newState = newState.route(
-        newState.route.currentRun(
-          newState.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+  ///
+  /// Takes in the current state and performs returns state updated for start of a new run
+  ///
+  /// Initially populate current run with default splits data, start on split 0, increment attempt count
+  ///
+  /// Set start of first split to event timestamp, end to current time
+  /// (This might be called a millisecond or so after the initial event)
+  ///
+  /// Update that the run is now in progress
+  private func startNewRunReducer(_ curState: AppState, _ timestamp: Double) -> AppState {
+    let curSplitIndex = 0
+    return curState.withRoute(
+      curState.route
+        .withCurrentSplit(curSplitIndex)
+        .withAttemptCount(1 + curState.route.attemptCount)
+        .withCurrentRun(startOfSplitReducer(curState.route.splits, curSplitIndex, timestamp))
+    ).withRunInProgress(true)
+  }
 
-      // Update that the run is now in progress
-      newState = newState.runInProgress(true)
-    } else if (newState.runInProgress) {
-      // Update current split's end timestamp to the event timestamp,
-      let curSplitIndex = state.route.currentSplit
-      let updatedCurSplit = state.route.currentRun[curSplitIndex]
-        .endTimestamp(timestamp)
+  ///
+  /// Takes a run, split index, and timestamp, and produces an updated run where the current split is updated for the start of a new split
+  ///
+  private func startOfSplitReducer(_ run: [SplitModel], _ splitIndex: Int, _ ts: Double)
+    -> [SplitModel]
+  {
+    return run.arrayByReplacing(
+      index: splitIndex,
+      with: run[splitIndex]
+        .withStartTime(ts)
+        .withRunStartTime(splitIndex == 0 ? ts : run[0].startTime!)
+        .withEndTime(ProcessInfo.processInfo.systemUptime))
+  }
 
-      newState = newState.route(
-        newState.route.currentRun(
-          newState.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+  ///
+  /// Takes a run, split index, and timestamp, and produces an updated run where the current split is updated for the end of a split
+  ///
+  private func endOfSplitReducer(_ run: [SplitModel], _ splitIndex: Int, _ ts: Double)
+    -> [SplitModel]
+  {
+    return run.arrayByReplacing(
+      index: splitIndex,
+      with: run[splitIndex].withEndTime(ts))
+  }
 
-      // If the split time is better than our previous personal-best, update it
-      let splitAtCurIndex = newState.route.splits[curSplitIndex]
-      if let splitPb = splitAtCurIndex.bestTime {
-        if updatedCurSplit.elapsed! < splitPb {
-          newState = newState.route(
-            newState.route.splits(
-              newState.route.splits.arrayByReplacing(
-                index: curSplitIndex, with: splitAtCurIndex.bestTime(updatedCurSplit.elapsed!))))
+  ///
+  /// Takes in the current state and performs returns state updated with next split logic handled
+  ///
+  private func doNextSplitReducer(_ curState: AppState, _ timestamp: Double) -> AppState {
+    // Update current split's end timestamp to the event timestamp,
+    let curSplitIndex = curState.route.currentSplit
+
+    // If not on the last split, new next split is 1 + previous split index
+    let nextSplitIndex =
+      (curSplitIndex == curState.route.splits.count - 1)
+      ? curSplitIndex
+      : 1 + curSplitIndex
+
+    // Update run for end of current split
+    let runWithUpdatedCurSplit = endOfSplitReducer(
+      curState.route.currentRun,
+      curSplitIndex,
+      timestamp)
+
+    // If not on the last split, update start time of next split
+    let updatedRun =
+      (curSplitIndex == curState.route.splits.count - 1)
+      ? runWithUpdatedCurSplit
+      : startOfSplitReducer(runWithUpdatedCurSplit, 1 + curSplitIndex, timestamp)
+
+    // If on the last split, run will be not in progress after this
+    let runInProgress = (curSplitIndex == curState.route.splits.count - 1) ? false : true
+
+    // If on the last split, update our PB run
+    let bestRun: [SplitModel]? =
+      (curSplitIndex == curState.route.splits.count - 1)
+      ? runPbReducer(curState.route.bestRun, updatedRun)
+      : curState.route.bestRun
+
+    // If on the last split, update individual split PBs
+    let updatedSplits =
+      (curSplitIndex == curState.route.splits.count - 1)
+      ? splitPbReducer(curState.route.splits, curState.route.currentRun)
+      : curState.route.splits
+
+    return curState.withRoute(
+      curState.route
+        .withCurrentRun(updatedRun)
+        .withSplits(updatedSplits)
+        .withCurrentSplit(nextSplitIndex)
+        .withBestRun(bestRun)
+    ).withRunInProgress(runInProgress)
+  }
+
+  ///
+  /// Produces the best run for the route given the existing best run and the current run
+  ///
+  private func runPbReducer(_ bestRun: [SplitModel]?, _ currentRun: [SplitModel]) -> [SplitModel] {
+    if let bestRun = bestRun {
+      if let pbRunTime = RouteModel.totalTimeOfRun(bestRun) {
+        if RouteModel.totalTimeOfRun(currentRun)! < pbRunTime {
+          return currentRun
         }
-      } else {
-        newState = newState.route(
-          newState.route.splits(
-            newState.route.splits.arrayByReplacing(
-              index: curSplitIndex, with: splitAtCurIndex.bestTime(updatedCurSplit.elapsed!))))
       }
-
-      if (curSplitIndex == newState.route.splits.count - 1) {
-        // Update route personal-best if necessary
-        if let bestRun = newState.route.bestRun {
-          if let pbRunTime = RouteModel.totalTimeOfRun(bestRun) {
-            if RouteModel.totalTimeOfRun(newState.route.currentRun)! < pbRunTime {
-              newState = newState.route(newState.route.bestRun(newState.route.currentRun))
-            }
-          }
-        } else {
-          newState = newState.route(newState.route.bestRun(newState.route.currentRun))
-        }
-
-        // Run is now no longer in progress
-        newState = newState.runInProgress(false)
-      } else {
-        // Update nest split's start timestamp to the event timestamp
-        let updatedNextSplit = newState.route.currentRun[1 + curSplitIndex]
-          .startTimestamp(timestamp)
-          .globalStartTimestamp(newState.route.currentRun[0].startTimestamp!)
-          .endTimestamp(ProcessInfo.processInfo.systemUptime)
-        newState = newState.route(
-          newState.route.currentRun(
-            newState.route.currentRun.arrayByReplacing(
-              index: 1 + curSplitIndex, with: updatedNextSplit)))
-        newState = newState.route(newState.route.currentSplit(1 + curSplitIndex))
-      }
+      // If we made it here, return old best run
+      return bestRun
+    } else {
+      return currentRun
     }
-    return newState
+  }
+
+  ///
+  /// Produces an updated splits array if a new split PB was achieved
+  ///
+  private func splitPbReducer(
+    _ splits: [SplitModel], _ runThatJustFinished: [SplitModel]
+  ) -> [SplitModel] {
+    return splits.enumerated().map { index, split in
+      if let splitPb = split.bestElapsedTime {
+        // If the split time is better than our previous personal-best, update it
+        if runThatJustFinished[index].elapsed! < splitPb {
+          return split.withBestTime(runThatJustFinished[index].elapsed!)
+        }
+      } else {
+        // If there's no PB, record this split time as the PB
+        return split.withBestTime(runThatJustFinished[index].elapsed!)
+      }
+      // If we reach the bottom, just return what was passed in
+      return split
+    }
   }
 
   ///
@@ -297,11 +351,10 @@ class AppStateController: ObservableObject {
   ///
   private func timerUpdateReducer(curState: AppState, currentTime: Double) -> AppState {
     let currentSplit = curState.route.currentSplit
-    return curState.route(
-      curState.route.currentRun(
+    return curState.withRoute(
+      curState.route.withCurrentRun(
         curState.route.currentRun.arrayByReplacing(
           index: currentSplit,
-          with: curState.route.currentRun[currentSplit]
-            .endTimestamp(currentTime))))
+          with: curState.route.currentRun[currentSplit].withEndTime(currentTime))))
   }
 }

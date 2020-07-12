@@ -50,8 +50,8 @@ public struct RouteModel: Codable, Equatable {
   /// The amount of time that has elapsed since the start of the first split and the end of the last split with an end timestamp
   /// For a completed run, this will give the total run time, or for an in progress run, this gives the elapsed time of the run as of the current split
   public static func totalTimeOfRun(_ run: [SplitModel]) -> Double? {
-    let lastSplit = run.last { $0.endTimestamp != nil }
-    if let start = run[0].startTimestamp, let end = lastSplit?.endTimestamp {
+    let lastSplit = run.last { $0.endTime != nil }
+    if let start = run[0].startTime, let end = lastSplit?.endTime {
       return end - start
     } else {
       return nil

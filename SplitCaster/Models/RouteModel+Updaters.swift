@@ -10,7 +10,7 @@ import Foundation
 
 /// Functional style update methods for routes. Intended to be used instead of setters, these methods all return a new object with the value set on it.
 /// So if you have a route  and you want to increment the attempt count on it, you'd call
-/// let updated: RouteModel = route.attemptCount(route.attemptCount + 1)
+/// let updated: RouteModel = route.withAttemptCount(route.attemptCount + 1)
 extension RouteModel {
   public func copy() -> RouteModel {
     return RouteModel(
@@ -24,7 +24,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func name(_ newName: String!) -> RouteModel {
+  public func withName(_ newName: String!) -> RouteModel {
     return RouteModel(
       name: newName,
       gameName: self.gameName,
@@ -36,7 +36,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func gameName(_ newGameName: String!) -> RouteModel {
+  public func withGameName(_ newGameName: String!) -> RouteModel {
     return RouteModel(
       name: self.name,
       gameName: newGameName,
@@ -48,7 +48,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func platform(_ newPlatform: String!) -> RouteModel {
+  public func withPlatform(_ newPlatform: String!) -> RouteModel {
     return RouteModel(
       name: self.name,
       gameName: self.gameName,
@@ -60,7 +60,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func attemptCount(_ newAttemptCount: Int) -> RouteModel {
+  public func withAttemptCount(_ newAttemptCount: Int) -> RouteModel {
     return RouteModel(
       name: self.name,
       gameName: self.gameName,
@@ -72,7 +72,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func splits(_ newSplits: [SplitModel]!) -> RouteModel {
+  public func withSplits(_ newSplits: [SplitModel]!) -> RouteModel {
     return RouteModel(
       name: self.name,
       gameName: self.gameName,
@@ -84,7 +84,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func bestRun(_ newBestRun: [SplitModel]!) -> RouteModel {
+  public func withBestRun(_ newBestRun: [SplitModel]!) -> RouteModel {
     return RouteModel(
       name: self.name,
       gameName: self.gameName,
@@ -96,7 +96,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func currentSplit(_ newCurrentSplit: Int) -> RouteModel {
+  public func withCurrentSplit(_ newCurrentSplit: Int) -> RouteModel {
     return RouteModel(
       name: self.name,
       gameName: self.gameName,
@@ -108,7 +108,7 @@ extension RouteModel {
       currentRun: self.currentRun)
   }
 
-  public func currentRun(_ newCurrentRun: [SplitModel]!) -> RouteModel {
+  public func withCurrentRun(_ newCurrentRun: [SplitModel]!) -> RouteModel {
     return RouteModel(
       name: self.name,
       gameName: self.gameName,
