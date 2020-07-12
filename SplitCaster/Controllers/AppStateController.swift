@@ -155,8 +155,13 @@ class AppStateController: ObservableObject {
   }
 
   private func handleSplitKeyPressed(timestamp: Double) {
+    var shouldSave = false
     let oldRunInProgress = state.runInProgress
+    let oldState = state
     state = splitEventUpdateReducer(curState: state, timestamp: timestamp)
+
+    // If splits have changed, it means we saved a new segment PB, so we should save
+    shouldSave = state.route.splits != oldState.route.splits
 
     // Do the side effect of start/stop timer independent of state reducer
     if state.runInProgress != oldRunInProgress {
@@ -164,7 +169,16 @@ class AppStateController: ObservableObject {
         startUpdateTimer()
       } else {
         stopUpdateTimer()
+        // If we're stopping timer, it means a run ended, so we should save
+        shouldSave = true
       }
+    }
+
+    // Save data to disk
+    if shouldSave {
+      let dataDirPath = NSString(string: "SplitCasterData").appendingPathComponent(
+        AppStateController.routeFilename)
+      saveRouteToDocuments(path: dataDirPath)
     }
   }
 
@@ -198,21 +212,28 @@ class AppStateController: ObservableObject {
     } else if (newState.runInProgress) {
       // Update current split's end timestamp to the event timestamp,
       let curSplitIndex = state.route.currentSplit
-      var updatedCurSplit = state.route.currentRun[curSplitIndex]
+      let updatedCurSplit = state.route.currentRun[curSplitIndex]
         .endTimestamp(timestamp)
-
-      // If the split time is better than our previous personal-best, update it
-      if let splitPb = updatedCurSplit.bestTime {
-        if updatedCurSplit.elapsed! < splitPb {
-          updatedCurSplit = updatedCurSplit.bestTime(updatedCurSplit.elapsed!)
-        }
-      } else {
-        updatedCurSplit = updatedCurSplit.bestTime(updatedCurSplit.elapsed!)
-      }
 
       newState = newState.route(
         newState.route.currentRun(
           newState.route.currentRun.arrayByReplacing(index: curSplitIndex, with: updatedCurSplit)))
+
+      // If the split time is better than our previous personal-best, update it
+      let splitAtCurIndex = newState.route.splits[curSplitIndex]
+      if let splitPb = splitAtCurIndex.bestTime {
+        if updatedCurSplit.elapsed! < splitPb {
+          newState = newState.route(
+            newState.route.splits(
+              newState.route.splits.arrayByReplacing(
+                index: curSplitIndex, with: splitAtCurIndex.bestTime(updatedCurSplit.elapsed!))))
+        }
+      } else {
+        newState = newState.route(
+          newState.route.splits(
+            newState.route.splits.arrayByReplacing(
+              index: curSplitIndex, with: splitAtCurIndex.bestTime(updatedCurSplit.elapsed!))))
+      }
 
       if (curSplitIndex == newState.route.splits.count - 1) {
         // Update route personal-best if necessary
@@ -222,15 +243,12 @@ class AppStateController: ObservableObject {
               newState = newState.route(newState.route.bestRun(newState.route.currentRun))
             }
           }
+        } else {
+          newState = newState.route(newState.route.bestRun(newState.route.currentRun))
         }
 
         // Run is now no longer in progress
         newState = newState.runInProgress(false)
-
-        // Save data to disk
-        let dataDirPath = NSString(string: "SplitCasterData").appendingPathComponent(
-          AppStateController.routeFilename)
-        saveRouteToDocuments(path: dataDirPath)
       } else {
         // Update nest split's start timestamp to the event timestamp
         let updatedNextSplit = newState.route.currentRun[1 + curSplitIndex]
