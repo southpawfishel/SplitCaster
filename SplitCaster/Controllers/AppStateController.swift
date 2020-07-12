@@ -216,9 +216,11 @@ class AppStateController: ObservableObject {
 
       if (curSplitIndex == newState.route.splits.count - 1) {
         // Update route personal-best if necessary
-        if let pbRunTime = RouteModel.totalTimeOfRun(newState.route.bestRun!) {
-          if RouteModel.totalTimeOfRun(newState.route.currentRun)! < pbRunTime {
-            newState = newState.route(newState.route.bestRun(newState.route.currentRun))
+        if let bestRun = newState.route.bestRun {
+          if let pbRunTime = RouteModel.totalTimeOfRun(bestRun) {
+            if RouteModel.totalTimeOfRun(newState.route.currentRun)! < pbRunTime {
+              newState = newState.route(newState.route.bestRun(newState.route.currentRun))
+            }
           }
         }
 
