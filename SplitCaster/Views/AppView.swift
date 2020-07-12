@@ -22,10 +22,11 @@ struct AppView: View {
   }
 
   var SplitsScreen: some View {
-    VStack {
+    let indexed = stateStore.state.route.currentRun.enumerated().map({ $0 })
+    return VStack {
       SplitsHeader
-      List(stateStore.state.route.currentRun, id: \.name) { split in
-        SplitRow(split: split)
+      List(indexed, id: \.element.name) { i, split in
+        SplitRow(split: split, index: i)
       }
       SplitsFooter
     }

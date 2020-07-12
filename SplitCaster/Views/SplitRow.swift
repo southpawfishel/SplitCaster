@@ -9,9 +9,11 @@
 import SwiftUI
 
 struct SplitRow: View {
-  static let height: CGFloat = 44.0
+  static let height: CGFloat = 52.0
+  static let imgHeight: CGFloat = SplitRow.height - 20.0
 
-  var split: SplitModel
+  let split: SplitModel
+  let index: Int
 
   var body: some View {
     HStack {
@@ -19,8 +21,8 @@ struct SplitRow: View {
         Image(split.iconFilename!)
           .resizable()
           .frame(
-            width: 50.0,
-            height: 50.0,
+            width: SplitRow.imgHeight,
+            height: SplitRow.imgHeight,
             alignment: .leading
           )
           .offset(x: 10.0)
@@ -52,7 +54,11 @@ struct SplitRow: View {
         )
         .padding(10.0)
         .frame(width: 90, alignment: .trailing)
-    }.frame(height: SplitRow.height)
+    }.frame(height: SplitRow.height).background(
+      index % 2 == 0
+        ? Color.init(red: 0.15, green: 0.15, blue: 0.15)
+        : Color.init(red: 0.2, green: 0.2, blue: 0.2)
+    ).padding(.init(top: -10, leading: -10, bottom: -10, trailing: -10))
   }
 }
 
@@ -65,6 +71,6 @@ struct SplitRow_Previews: PreviewProvider {
         bestTime: 0,
         startTimestamp: 1000.0,
         endTimestamp: 4801.3,
-        globalStartTimestamp: 0))
+        globalStartTimestamp: 0), index: 0)
   }
 }
