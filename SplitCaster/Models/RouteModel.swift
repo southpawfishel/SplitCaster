@@ -14,9 +14,8 @@ import Foundation
 /// data for a specific run, as well as the abstract split data for all runs.
 /// Also owns the data about the best run ever for this route.
 public struct RouteModel: Codable, Equatable {
-  ///
-  /// Persistable properties
-  ///
+
+  // MARK: Persistable properties
 
   /// The name of the route (e.g. "16 star")
   public let name: String
@@ -31,9 +30,7 @@ public struct RouteModel: Codable, Equatable {
   /// The splits for the fastest completion (personal best) of this route by this user
   public let bestRun: [SplitModel]?
 
-  ///
-  /// Ephemeral properties
-  ///
+  // MARK: Ephemeral properties
 
   /// The index of the current split that is being actively timed
   public let currentSplit: Int
@@ -43,14 +40,23 @@ public struct RouteModel: Codable, Equatable {
   ///
   public let currentRun: [SplitModel]
 
-  ///
-  /// Computed  properties
-  ///
+  // MARK: Helper Functions
 
   /// The amount of time that has elapsed since the start of the first split and the end of the last split with an end timestamp
   /// For a completed run, this will give the total run time, or for an in progress run, this gives the elapsed time of the run as of the current split
   public static func totalTimeOfRun(_ run: [SplitModel]) -> Double? {
     let lastSplit = run.last { $0.endTime != nil }
+    return RouteModel.totalTimeOfRun(run, lastSplit)
+  }
+
+  /// The amount of time that has elapsed since the start of the first split and the end of the run at the provided index
+  /// Useful for getting the time of our best run up to a certain split
+  public static func totalTimeOfRun(_ run: [SplitModel], _ upToIndex: Int) -> Double? {
+    return RouteModel.totalTimeOfRun(run, run[upToIndex])
+  }
+
+  /// The amount of time that  has elapsed between the start of a run and the given split
+  private static func totalTimeOfRun(_ run: [SplitModel], _ lastSplit: SplitModel?) -> Double? {
     if let start = run[0].startTime, let end = lastSplit?.endTime {
       return end - start
     } else {

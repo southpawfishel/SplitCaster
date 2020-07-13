@@ -15,9 +15,8 @@ import Foundation
 /// for the best possible time ever for a split, which is not necessarily
 /// the same as the time for this split in the overall fastest run.
 public struct SplitModel: Codable, Equatable {
-  ///
-  /// Persistable  properties
-  ///
+
+  // MARK: Persistable  properties
 
   /// The name of this split
   public let name: String
@@ -26,9 +25,7 @@ public struct SplitModel: Codable, Equatable {
   /// The best time ever recorded for this particular split
   public let bestElapsedTime: Double?
 
-  ///
-  /// Ephemeral  properties
-  ///
+  // MARK: Ephemeral Properties
 
   /// The time at which this split started
   public let startTime: Double?
@@ -36,10 +33,12 @@ public struct SplitModel: Codable, Equatable {
   public let endTime: Double?
   /// The time at which the run started (same as the first split time)
   public let runStartTime: Double?
+  /// Whether or not this split's time is better than our best time for this split (aka display as gold?)
+  public let isGoldSplit: Bool
+  /// Whether or not this split's time is ahead of our PB pace (aka display as green?)
+  public let isAheadOfPb: Bool
 
-  ///
-  /// Computed  properties
-  ///
+  // MARK: Computed Properties
 
   ///
   /// The amount of time that has elapsed between the start and end of this split

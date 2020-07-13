@@ -26,6 +26,8 @@ extension SplitModel {
     startTime = try container.decodeIfPresent(Double.self, forKey: .startTime)
     endTime = try container.decodeIfPresent(Double.self, forKey: .endTime)
     runStartTime = try container.decodeIfPresent(Double.self, forKey: .runStartTime)
+    isGoldSplit = false
+    isAheadOfPb = false
   }
 
   public func encode(to encoder: Encoder) throws {

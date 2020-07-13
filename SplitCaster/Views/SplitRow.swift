@@ -44,6 +44,7 @@ struct SplitRow: View {
             weight: .regular,
             design: .monospaced)
         )
+        .foregroundColor(colorForElapsedTime())
         .frame(width: 90, alignment: .trailing)
       Text(TimeFormatting.formatDurationHMS(seconds: split.globalElapsed))
         .font(
@@ -60,6 +61,20 @@ struct SplitRow: View {
         : Color.init(red: 0.2, green: 0.2, blue: 0.2)
     ).padding(.init(top: -10, leading: -10, bottom: -10, trailing: -10))
   }
+
+  func colorForElapsedTime() -> Color {
+    if split.elapsed != nil {
+      if split.isGoldSplit {
+        return AppView.gold
+      } else if split.isAheadOfPb {
+        return AppView.green
+      } else {
+        return AppView.red
+      }
+    } else {
+      return Color.white
+    }
+  }
 }
 
 struct SplitRow_Previews: PreviewProvider {
@@ -71,6 +86,9 @@ struct SplitRow_Previews: PreviewProvider {
         bestElapsedTime: 0,
         startTime: 1000.0,
         endTime: 4801.3,
-        runStartTime: 0), index: 0)
+        runStartTime: 0,
+        isGoldSplit: false,
+        isAheadOfPb: true),
+      index: 0)
   }
 }

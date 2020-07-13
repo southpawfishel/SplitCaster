@@ -224,12 +224,19 @@ class AppStateController: ObservableObject {
   ///
   /// Takes a run, split index, and timestamp, and produces an updated run where the current split is updated for the end of a split
   ///
-  private func endOfSplitReducer(_ run: [SplitModel], _ splitIndex: Int, _ ts: Double)
+  private func endOfSplitReducer(
+    _ run: [SplitModel], _ bestRun: [SplitModel]?, _ splitIndex: Int, _ ts: Double
+  )
     -> [SplitModel]
   {
+    let updatedSplit = run[splitIndex].withEndTime(ts)
+    let isGold =
+      bestRun == nil
+      ? true
+      : updatedSplit.elapsed! <= bestRun![splitIndex].elapsed!
     return run.arrayByReplacing(
       index: splitIndex,
-      with: run[splitIndex].withEndTime(ts))
+      with: updatedSplit.withIsGold(isGold))
   }
 
   ///
@@ -248,6 +255,7 @@ class AppStateController: ObservableObject {
     // Update run for end of current split
     let runWithUpdatedCurSplit = endOfSplitReducer(
       curState.route.currentRun,
+      curState.route.bestRun,
       curSplitIndex,
       timestamp)
 
@@ -350,11 +358,23 @@ class AppStateController: ObservableObject {
   /// splits given the current time
   ///
   private func timerUpdateReducer(curState: AppState, currentTime: Double) -> AppState {
-    let currentSplit = curState.route.currentSplit
-    return curState.withRoute(
-      curState.route.withCurrentRun(
-        curState.route.currentRun.arrayByReplacing(
-          index: currentSplit,
-          with: curState.route.currentRun[currentSplit].withEndTime(currentTime))))
+    let curSplitIndex = curState.route.currentSplit
+    let currentRun = curState.route.currentRun
+    let updatedRun = currentRun.arrayByReplacing(
+      index: curSplitIndex,
+      with: currentRun[curSplitIndex].withEndTime(currentTime))
+
+    // Check if our time is better than PB
+    let isFasterThanPb =
+      (curState.route.bestRun == nil)
+      ? true
+      : RouteModel.totalTimeOfRun(currentRun, curSplitIndex)! <= RouteModel.totalTimeOfRun(
+        curState.route.bestRun!, curSplitIndex)!
+
+    let finalUpdatedRun = updatedRun.arrayByReplacing(
+      index: curSplitIndex,
+      with: updatedRun[curSplitIndex].withIsAheadOfPb(isFasterThanPb))
+
+    return curState.withRoute(curState.route.withCurrentRun(finalUpdatedRun))
   }
 }

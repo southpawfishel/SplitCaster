@@ -11,6 +11,10 @@ import SwiftUI
 struct AppView: View {
   @EnvironmentObject var stateStore: AppStateController
 
+  static let green: Color = Color.green
+  static let red: Color = Color.red
+  static let gold: Color = Color.yellow
+
   var body: some View {
     Group {
       if stateStore.state.hasPermissions {
@@ -26,7 +30,9 @@ struct AppView: View {
     return VStack {
       SplitsHeader
       List(indexed, id: \.element.name) { i, split in
-        SplitRow(split: split, index: i)
+        SplitRow(
+          split: split,
+          index: i)
       }
       SplitsFooter
     }
@@ -81,11 +87,27 @@ struct AppView: View {
             weight: .regular,
             design: .monospaced)
         )
+        .foregroundColor(colorForRouteTime())
         .frame(alignment: .trailing)
         .padding(.trailing, 10.0)
       }
     }
     .padding(.bottom, 4.0)
+  }
+
+  func colorForRouteTime() -> Color {
+    let route = stateStore.state.route
+    if let curRunTime = RouteModel.totalTimeOfRun(route.currentRun, route.currentSplit) {
+      if let bestRun = stateStore.state.route.bestRun {
+        return curRunTime <= RouteModel.totalTimeOfRun(bestRun, route.currentSplit)!
+          ? AppView.green
+          : AppView.red
+      } else {
+        return AppView.green
+      }
+    } else {
+      return Color.white
+    }
   }
 
   var PermissionsScreen: some View {
